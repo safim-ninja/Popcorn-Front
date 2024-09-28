@@ -1,3 +1,5 @@
+import {Link} from "react-router-dom";
+
 const Register = () => {
     return (
         <section className="bg-gray-50 dark:bg-gray-900">
@@ -56,9 +58,11 @@ const Register = () => {
                                 an account
                             </button>
                             <p className="text-sm font-light text-gray-500 dark:text-gray-400">
-                                Already have an account? <a href="#"
-                                                            className="font-medium text-primary-600 hover:underline dark:text-primary-500">Login
-                                here</a>
+                                Already have an account?
+                                <Link to="/login"
+                                      className="font-medium text-primary-600 hover:underline dark:text-primary-500">
+                                    Login here
+                                </Link>
                             </p>
                         </form>
                     </div>

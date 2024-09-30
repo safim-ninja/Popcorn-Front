@@ -1,5 +1,6 @@
 import {Navigate, Outlet} from "react-router-dom";
 import {useStateContext} from "../Context/ContextProvider.jsx";
+import Navbar from "./Navbar.jsx";
 
 const MasterLayout = () => {
     const {token} = useStateContext();
@@ -8,6 +9,7 @@ const MasterLayout = () => {
     }
     return (
         <>
+            <Navbar />
             <Outlet/>
         </>
     )

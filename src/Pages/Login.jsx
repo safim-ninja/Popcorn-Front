@@ -1,10 +1,32 @@
 import {Link} from "react-router-dom";
+import {useState} from "react";
+import {useStateContext} from "../Context/ContextProvider.jsx";
+import axiosClient from "../axiosClient.jsx";
 
 const Login = () => {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
+    const {setUser, setToken} = useStateContext()
+
     const login = () => {
         localStorage.setItem('ACCESS_TOKEN', '1234');
         localStorage.setItem('user', JSON.stringify({name: 'Safim', phone: '0168'}));
         console.log(JSON.stringify({name: 'Safim', phone: '0168'}))
+    }
+    const handleLogin = (e) => {
+        e.preventDefault();
+        const payload = {
+            email: email,
+            password: password
+        }
+        axiosClient.post("/login", payload).then(({data}) => {
+            setUser(data.user);
+            setToken(data.token);
+            console.log(data);
+        }).catch(error => {
+            console.error(error);
+        })
     }
     return (
         <>
@@ -21,12 +43,14 @@ const Login = () => {
                             <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
                                 Sign in to your account
                             </h1>
-                            <form className="space-y-4 md:space-y-6" action="#">
+                            <form className="space-y-4 md:space-y-6" onSubmit={handleLogin}>
                                 <div>
                                     <label htmlFor="email"
                                            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your
                                         email</label>
                                     <input type="email" name="email" id="email"
+                                           value={email}
+                                           onChange={(e) => setEmail(e.target.value)}
                                            className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                            placeholder="name@company.com" required=""/>
                                 </div>
@@ -34,6 +58,8 @@ const Login = () => {
                                     <label htmlFor="password"
                                            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
                                     <input type="password" name="password" id="password" placeholder="••••••••"
+                                           value={password}
+                                           onChange={(e) => setPassword(e.target.value)}
                                            className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                            required=""/>
                                 </div>
@@ -60,7 +86,7 @@ const Login = () => {
                                 <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                                     Don’t have an account yet?
                                     <Link to="/register"
-                                       className="font-medium text-primary-600 hover:underline dark:text-primary-500">
+                                          className="font-medium text-primary-600 hover:underline dark:text-primary-500">
                                         Sign up
                                     </Link>
                                 </p>
@@ -69,7 +95,7 @@ const Login = () => {
                     </div>
                 </div>
             </section>
-            <button onClick={login}>Login</button>
+            <button type={"submit"}>Login</button>
         </>
     )
 }

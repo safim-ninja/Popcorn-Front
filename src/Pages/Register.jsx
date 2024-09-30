@@ -19,8 +19,12 @@ const Register = () => {
             password: password,
             password_confirmation: passwordConfirmation,
         }
-        axiosClient.post("/register", payload).then((response) => {
-            console.log(response);
+        axiosClient.post("/register", payload).then(({data}) => {
+            setUser(data.user);
+            setToken(data.token);
+            console.log(data);
+        }).catch(error => {
+            console.error(error);
         })
     }
     return (

@@ -1,10 +1,34 @@
 import {useStateContext} from "../Context/ContextProvider.jsx";
+import axiosClient from "../axiosClient.jsx";
 
 const Users = () => {
-    const logout = () => {
-        localStorage.removeItem('ACCESS_TOKEN');
+    const {user, setUser, setToken} = useStateContext();
+    const handleLogout = () => {
+        const payload = {
+            user: user
+        }
+        axiosClient.post("/logout", payload).then(({data}) => {
+            setUser(data.user);
+            setToken(data.token);
+            console.log(data);
+        }).catch(error => {
+            console.error(error);
+        })
     }
-    const {user} = useStateContext();
+    // const handleLogin = (e) => {
+    //     e.preventDefault();
+    //     const payload = {
+    //         email: email,
+    //         password: password
+    //     }
+    //     axiosClient.post("/login", payload).then(({data}) => {
+    //         setUser(data.user);
+    //         setToken(data.token);
+    //         console.log(data);
+    //     }).catch(error => {
+    //         console.error(error);
+    //     })
+    // }
     return (
         <>
             <div>
@@ -12,7 +36,7 @@ const Users = () => {
             </div>
             Name: {user.name}<br />
             Phone: {user.phone}<br />
-            <button onClick={logout}>Logout</button>
+            <button onClick={handleLogout}>Logout</button>
         </>
     )
 }
